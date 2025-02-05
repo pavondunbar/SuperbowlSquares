@@ -36,7 +36,7 @@ Winners determined by score digits at:
 - End of 3rd quarter (25% of pool)
 - Final score (25% of pool)
 
-Example: If Chiefs lead 17-13 at first quarter, square (7,3) wins first payout
+Example: If Chiefs lead 17-13 at end of first quarter, square (7,3) wins first payout
 
 ## Key Functions
 

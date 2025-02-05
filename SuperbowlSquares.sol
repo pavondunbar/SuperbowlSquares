@@ -3,13 +3,17 @@ pragma solidity 0.8.26;
 
 contract SuperBowlSquares {
     address public owner;
-    uint256 public constant SQUARE_PRICE = 361000000000000; // 0.00361 ETH in wei. Change this entry amount to whatever you wish IN WEI.
-    uint256 public constant OWNER_FEE = 10; // 10% - Percentage of the entry amount gos to contract owner as a service fee.
-    uint256 public constant PAYOUT_PERCENTAGE = 25; // 25% payour per winner. Superbowl has 4 quarters so each quarter the winner is paid 25% of the prize pool.
+    uint256 public constant SQUARE_PRICE = 36050000000000000; // 0.03605 ETH ($100) in wei
+    uint256 public constant OWNER_FEE = 10; // 10%
+    uint256 public constant PAYOUT_PERCENTAGE = 25; // 25% per winner
+    string public constant CHIEFS = "chiefs";
+    string public constant EAGLES = "eagles";
 
     struct Square {
         address player;
         bool occupied;
+        string horizontal;
+        string vertical;
     }
 
     // Grid representation: [Chiefs][Eagles]
@@ -35,6 +39,13 @@ contract SuperBowlSquares {
 
     constructor() {
         owner = msg.sender;
+        // Initialize grid with team names
+        for(uint8 i = 0; i < 10; i++) {
+            for(uint8 j = 0; j < 10; j++) {
+                grid[i][j].horizontal = CHIEFS;
+                grid[i][j].vertical = EAGLES;
+            }
+        }
     }
 
     function purchaseSquare(uint8 chiefsNumber, uint8 eaglesNumber) external payable gameActive {
@@ -48,7 +59,8 @@ contract SuperBowlSquares {
         payable(owner).transfer(ownerFeeAmount);
         contractBalance += contractAmount;
 
-        grid[chiefsNumber][eaglesNumber] = Square(msg.sender, true);
+        grid[chiefsNumber][eaglesNumber].player = msg.sender;
+        grid[chiefsNumber][eaglesNumber].occupied = true;
         emit SquarePurchased(msg.sender, chiefsNumber, eaglesNumber);
     }
 
